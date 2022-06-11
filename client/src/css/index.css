@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+}
+
+.dark {
+    --color-bg-primary: #23272f;
+    --color-bg-secondary: #353b46;
+    --color-bg-contrast: #e2e8f0;
+
+    --color-text-primary: #f7fafc;
+    --color-text-secondary: #e2e8f0;
+    --color-text-contrast: #2d3748;
+    --color-text-accent: #81e6d9;
+
+    --color-border-primary: #2d3748;
+    --color-border-secondary: #353b46;
+}
+
+.light {
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #edf2f7;
+    --color-bg-contrast: #2d3748;
+
+    --color-text-primary: #2d3748;
+    --color-text-secondary: #4a5568;
+    --color-text-contrast: #f7fafc;
+    --color-text-accent: #2b6cb0;
+
+    --color-border-primary: #2d3748;
+    --color-border-secondary: #4a5568;
+
+
+}
+
+.navitem {
+    position: relative;
+    display: inline-block;
+    padding: 1rem;
+}
+.navitem:after {
+    border-radius: 32px;
+    content: '';
+    width: 0px;
+    height: 1px;
+    position: absolute;
+    top: 98%;
+    left: 0;
+    transition: 200ms;
+    background-color: var(--color-text-primary);
+}
+.navitem:hover::after {
+    width: 100%;
+}
+.navitem:not(:hover):after {
+    right: 0;
+    left: auto;
+}
+
+::-webkit-scrollbar {
+    width: 0.9rem;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border: 4px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    border-radius: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    border: 4px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    border-radius: 0.5rem;
+}

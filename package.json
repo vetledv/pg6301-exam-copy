@@ -1,0 +1,39 @@
+{
+  "name": "exam-pg6301",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently yarn:dev:client yarn:dev:server",
+    "dev:client": "cd client && yarn dev",
+    "dev:server": "cd server && yarn dev",
+    "start": "cd server && yarn start",
+    "build": "yarn build:client && yarn build:server",
+    "build:client": "cd client && yarn install --frozen-lockfile --production=false && yarn build:parcel",
+    "build:server": "cd server && yarn install --frozen-lockfile --production=false",
+    "p:check": "prettier --check **/*.{js,jsx,ts,tsx}",
+    "p:format": "prettier --write **/*.{js,jsx,ts,tsx}",
+    "test": "yarn test:client && yarn test:server",
+    "test:client": "cd client && yarn test",
+    "test:server": "cd server && yarn test",
+    "verify": "yarn p:check && yarn test && yarn verify:server && yarn verify:client",
+    "verify:server": "cd server && yarn verify",
+    "verify:client": "cd client && yarn verify",
+    "prepare": "husky install",
+    "pre-commit": "yarn verify"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.4.1",
+    "concurrently": "^7.1.0",
+    "coveralls": "^3.1.1",
+    "husky": "^7.0.4",
+    "jest": "^27.4.7",
+    "prettier": "^2.6.2",
+    "ts-jest": "^27.1.4",
+    "typescript": "^4.6.4"
+  }, 
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn verify"
+    }
+  }
+}

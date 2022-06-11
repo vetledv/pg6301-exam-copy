@@ -1,0 +1,40 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+      - run: yarn install --frozen-lockfile
+      - run: yarn install
+        working-directory: server
+      - run: yarn install
+        working-directory: client
+      - run: yarn verify
+        env:
+          MONGO_URL: ${{ secrets.MONGO_URL }}
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          working-directory: client
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          working-directory: server
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          MONGO_URL: ${{ secrets.MONGO_URL }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          COOKIE_SECRET: ${{ secrets.AZURE_CLIENT_ID }}

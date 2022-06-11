@@ -1,0 +1,46 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "yarn start",
+    "dev": "parcel watch public/index.html",
+    "build": "yarn install --production=false && yarn build:parcel",
+    "build:parcel": "parcel build public/index.html",
+    "test": "jest -c jest.config.js",
+    "verify": "tsc"
+  },
+  "dependencies": {
+    "@parcel/transformer-react-refresh-wrap": "^2.5.0",
+    "randomstring": "^1.2.2",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-icons": "^4.4.0",
+    "react-query": "^3.39.1",
+    "react-router-dom": "^6.3.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/react-hooks": "^8.0.0",
+    "@types/jest": "^27.4.1",
+    "@types/pretty": "^2.0.1",
+    "@types/randomstring": "^1.1.8",
+    "@types/react": "^18.0.12",
+    "@types/react-dom": "^18.0.5",
+    "@types/react-router-dom": "^5.3.3",
+    "jest": "^27.5.1",
+    "jest-matchmedia-mock": "^1.1.0",
+    "mongodb": "^4.5.0",
+    "msw": "^0.42.1",
+    "parcel": "^2.6.0",
+    "postcss": "^8.4.13",
+    "pretty": "^2.0.0",
+    "process": "^0.11.10",
+    "react-test-renderer": "^18.1.0",
+    "tailwindcss": "^3.1.2",
+    "ts-jest": "^27.1.4",
+    "typescript": "^4.7.3",
+    "whatwg-fetch": "^3.6.2"
+  }
+}

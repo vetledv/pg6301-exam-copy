@@ -1,0 +1,21 @@
+module.exports = {
+    preset: 'ts-jest',
+    testEnvironment: 'jsdom',
+    clearMocks: true,
+    collectCoverage: true,
+    coverageDirectory: 'coverage',
+    collectCoverageFrom: [
+        '**/*.{jsx,tsx,ts,js}',
+        '!jest.config.js',
+        '!coverage/**',
+        '!client/dist/**',
+        '!client/**.config.{js,ts}',
+        '!server/**.config.{js,ts}',
+        '!client/coverage/**',
+        '!server/coverage/**',
+        '!client/src/mocks/**',
+        '!client/__tests__/reactQueryComponents.tsx',
+    ],
+    testMatch: ['**/__tests__/**.test.{jsx,tsx,ts,js}'],
+    moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+}
