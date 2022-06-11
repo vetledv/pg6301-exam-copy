@@ -18,6 +18,9 @@ export const NewArticleButton = ({
     const [date, setDate] = useState('')
     const postMutate = useMutateArticle()
 
+    const inputStyles =
+        'w-full p-2 border border-secondary bg-secondary rounded-lg focus:outline-cyan-500 focus:outline focus:outline-2 '
+
     const handleOpen = () => {
         if (!isExpanded) {
             setIsExpanded(true)
@@ -67,9 +70,10 @@ export const NewArticleButton = ({
         <div
             onClick={() => handleOpen()}
             className={
-                `px-4 py-2 flex flex-col justify-center items-center rounded-lg ` +
-                (!isExpanded && 'hover:bg-cyan-700  cursor-pointer') +
-                ` ${isExpanded ? 'bg-secondary' : 'bg-cyan-600'}`
+                'px-4 py-2 flex flex-col justify-center items-center rounded-lg ' +
+                (isExpanded
+                    ? 'bg-secondary'
+                    : 'hover:bg-cyan-700 bg-cyan-600 transition-colors cursor-pointer')
             }>
             <div
                 className={
@@ -96,14 +100,14 @@ export const NewArticleButton = ({
                         type='text'
                         value={headline}
                         onChange={(e) => setHeadline(e.target.value)}
-                        className='w-full p-2 border border-gray-400 rounded-lg bg-primary'
+                        className={inputStyles}
                     />
                     <div className='text-sm font-bold'>Body</div>
                     <textarea
                         data-testid='new-article-body'
                         value={body}
                         onChange={(e) => setBody(e.target.value)}
-                        className='w-full p-2 border border-gray-400 rounded-lg  bg-primary'
+                        className={inputStyles}
                         rows={10}
                     />
                     <div className='text-sm font-bold'>Date</div>
@@ -115,12 +119,12 @@ export const NewArticleButton = ({
                             console.log(e.target.value)
                             setDate(e.target.value)
                         }}
-                        className='w-full p-2 border border-gray-400 rounded-lg  bg-primary'
+                        className={inputStyles}
                     />
                     <div className='text-sm font-bold'>Topic</div>
                     <select
                         data-testid='new-article-topic'
-                        className='p-2 bg-primary'
+                        className={inputStyles}
                         defaultValue={'Select'}
                         onChange={(e) => setTopic(e.target.value)}>
                         <option

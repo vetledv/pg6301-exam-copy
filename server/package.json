@@ -8,6 +8,7 @@
     "start": "ts-node src/server.ts",
     "build": "yarn install",
     "test": "jest -c jest.config.js",
+    "test:coverage": "jest -c jest.config.js --coverage",
     "verify": "tsc"
   },
   "dependencies": {

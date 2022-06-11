@@ -66,11 +66,13 @@ export const Home = () => {
                 </div>
             )}
             {userType === 'anon' && (
-                <div
-                    data-testid='login-button-home'
-                    className=' w-fit px-4 py-2 rounded-lg bg-secondary cursor-pointer'
-                    onClick={() => navigate('/login')}>
-                    Log in to see more
+                <div className='col-span-1 lg:col-span-3'>
+                    <div
+                        data-testid='login-button-home'
+                        className=' w-fit px-4 py-2 rounded-lg bg-secondary cursor-pointer'
+                        onClick={() => navigate('/login')}>
+                        Log in to see more
+                    </div>
                 </div>
             )}
             {query.data.pages.map((page) =>
@@ -80,7 +82,7 @@ export const Home = () => {
                     </div>
                 ))
             )}
-            <div className='w-full col-span-1 lg:col-span-3'>
+            <div className='col-span-1 lg:col-span-3'>
                 {query.hasNextPage ? (
                     <button
                         className='w-full px-4 py-2 rounded-lg bg-secondary cursor-pointer'

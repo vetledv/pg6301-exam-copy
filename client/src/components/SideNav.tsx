@@ -45,7 +45,7 @@ export const SideNav: FC = () => {
                 </div>
             </div>
             <div
-                className='flex flex-col gap-2 p-2 w-full rounded-md bg-cyan-600 cursor-pointer text-contrast dark:text-primary'
+                className='flex flex-col gap-2 p-2 w-full rounded-md bg-cyan-600 hover:bg-cyan-700 transition-colors cursor-pointer text-contrast dark:text-primary'
                 onClick={() => navigate('/')}>
                 All articles
             </div>
@@ -57,7 +57,7 @@ const TopicButton = ({ topic, amount }: { topic: string; amount: number }) => {
     const navigate = useNavigate()
     return (
         <div
-            className='px-4 py-2 w-fit bg-cyan-600 hover:bg-cyan-700 cursor-pointer rounded-md text-contrast dark:text-primary'
+            className='px-4 py-2 w-fit bg-cyan-600 hover:bg-cyan-700 transition-colors cursor-pointer rounded-md text-contrast dark:text-primary'
             onClick={() => navigate('/articles/topic/' + topic)}>
             {topic.charAt(0).toUpperCase() + topic.slice(1)}({amount})
         </div>

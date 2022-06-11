@@ -8,6 +8,7 @@
     "build": "yarn install --production=false && yarn build:parcel",
     "build:parcel": "parcel build public/index.html",
     "test": "jest -c jest.config.js",
+    "test:coverage": "jest -c jest.config.js --coverage",
     "verify": "tsc"
   },
   "dependencies": {

@@ -37,20 +37,27 @@ export const Profile = () => {
     }
 
     return (
-        <div className='flex items-center'>
-            {gUser ? (
-                <img
-                    src={gUser ? gUser.picture : mUser?.picture}
-                    alt={gUser ? gUser.picture : mUser?.picture}
-                    className='rounded-full'></img>
-            ) : (
-                <CircleImage letter={mUser!.name.charAt(0)}></CircleImage>
-            )}
-            <div className='px-4'>
-                <div>{gUser ? gUser.locale : mUser?.name}</div>
-                <div>{gUser ? gUser.email : mUser?.email}</div>
+        <div className='flex flex-col gap-4 bg-secondary p-4 w-full rounded-lg'>
+            <div className='flex items-center'>
+                {gUser ? (
+                    <img
+                        src={gUser ? gUser.picture : mUser?.picture}
+                        alt={gUser ? gUser.picture : mUser?.picture}
+                        className='rounded-full'></img>
+                ) : (
+                    <CircleImage letter={mUser!.name.charAt(0)}></CircleImage>
+                )}
+                <div className='px-4'>
+                    <div>{gUser ? gUser.locale : mUser?.name}</div>
+                    <div>{gUser ? gUser.email : mUser?.email}</div>
+                </div>
             </div>
-            <button onClick={handleLogout}>Log out</button>
+            <div className='border-b border-secondary' />
+            <button
+                className='rounded-lg w-fit px-6 py-2 bg-red-400 hover:bg-red-600 transition-colors '
+                onClick={handleLogout}>
+                Log out
+            </button>
         </div>
     )
 }
