@@ -1,7 +1,5 @@
 # PG6301 eksamen <tittel på løsningen>
 
-[![Coverage Status](https://coveralls.io/repos/github/vetledv/pg6301-exam-copy/badge.svg?branch=master)](https://coveralls.io/github/vetledv/pg6301-exam-copy?branch=master)
-
 ## Egenutfylling av funksjonelle krav
 
 -   [x] Anonyme brukere skal se nyhetsaker når de kommer til nettsiden. Legg inn noen nyhetssaker for å demonstrere
