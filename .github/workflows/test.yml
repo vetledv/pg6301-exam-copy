@@ -9,7 +9,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 2
-
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -23,10 +22,12 @@ jobs:
       - name: Coverage client
         uses: ArtiomTr/jest-coverage-report-action@v2
         with:
+          package-manager: yarn
           working-directory: client
       - name: Coverage server
         uses: ArtiomTr/jest-coverage-report-action@v2
         with:
+          package-manager: yarn
           working-directory: server
         env:
           MONGO_URL: ${{ secrets.MONGO_URL }}

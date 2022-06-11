@@ -20,9 +20,9 @@
     "verify:client": "cd client && yarn verify",
     "prepare": "husky install",
     "pre-commit": "yarn verify",
-    "postinstall": "npm run install:client && npm run install:server",
-    "install:client": "cd client && yarn install --frozen-lockfile --production=false ",
-    "install:server": "cd server && yarn install "
+    "postinstall": "yarn install:client && yarn install:server",
+    "install:client": "cd client && yarn install --frozen-lockfile --production=false",
+    "install:server": "cd server && yarn install"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",
