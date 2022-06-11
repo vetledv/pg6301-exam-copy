@@ -25,12 +25,12 @@ jobs:
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
-          working-directory: client
+          base-path: client
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
-          working-directory: server
+          base-path: server
           github-token: ${{ secrets.GITHUB_TOKEN }}
         env:
           MONGO_URL: ${{ secrets.MONGO_URL }}
