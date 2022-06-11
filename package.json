@@ -9,7 +9,7 @@
     "start": "cd server && yarn start",
     "build": "yarn build:client && yarn build:server",
     "build:client": "cd client && yarn install --frozen-lockfile --production=false && yarn build:parcel",
-    "build:server": "cd server && yarn install --frozen-lockfile --production=false",
+    "build:server": "cd server && yarn install",
     "p:check": "prettier --check **/*.{js,jsx,ts,tsx}",
     "p:format": "prettier --write **/*.{js,jsx,ts,tsx}",
     "test": "yarn test:client && yarn test:server",
@@ -19,7 +19,10 @@
     "verify:server": "cd server && yarn verify",
     "verify:client": "cd client && yarn verify",
     "prepare": "husky install",
-    "pre-commit": "yarn verify"
+    "pre-commit": "yarn verify",
+    "postinstall": "npm run install:client && npm run install:server",
+    "install:client": "cd client && yarn install --frozen-lockfile --production=false ",
+    "install:server": "cd server && yarn install "
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",
@@ -30,7 +33,7 @@
     "prettier": "^2.6.2",
     "ts-jest": "^27.1.4",
     "typescript": "^4.6.4"
-  }, 
+  },
   "husky": {
     "hooks": {
       "pre-commit": "yarn verify"

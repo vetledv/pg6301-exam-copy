@@ -8,32 +8,26 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 2
 
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: 16.x
-      - run: yarn install --frozen-lockfile
-      - run: yarn install
-        working-directory: server
-      - run: yarn install
-        working-directory: client
-      - run: yarn verify
+      - name: install dependencies
+        run: yarn install --frozen-lockfile
+      - run: yarn test
         env:
           MONGO_URL: ${{ secrets.MONGO_URL }}
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
+      - name: Coverage client
+        uses: ArtiomTr/jest-coverage-report-action@v2
         with:
-          base-path: client
-          path-to-lcov: ${{ github.workspace }}/client/coverage/lcov.info
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
+          working-directory: client
+      - name: Coverage server
+        uses: ArtiomTr/jest-coverage-report-action@v2
         with:
-          base-path: server
-          path-to-lcov: ${{ github.workspace }}/server/coverage/lcov.info
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: server
         env:
           MONGO_URL: ${{ secrets.MONGO_URL }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
