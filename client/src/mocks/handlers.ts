@@ -21,11 +21,11 @@ export const handlers = [
         }
     }),
 
-    rest.get('/api/articles/69', (req, res, ctx) => {
+    rest.get('/api/articles/:id', (req, res, ctx) => {
         return res(ctx.status(200), ctx.json({ ...testArticle }))
     }),
-    rest.get('/api/articles/topic/news', (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json({ ...testArticle }))
+    rest.get('/api/articles/topic/:topic', (req, res, ctx) => {
+        return res(ctx.status(200), ctx.json([{ ...testArticle }]))
     }),
     rest.post('/api/articles', (req, res, ctx) => {
         return res(ctx.status(200), ctx.json({ ...testArticle }))

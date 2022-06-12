@@ -1,3 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Test render Render without crashing 1`] = `"{\\"_reactInternalInstance\\":\\"censored\\"}"`;
+exports[`Client tests Render without crashing 1`] = `"{\\"_reactInternalInstance\\":\\"censored\\"}"`;

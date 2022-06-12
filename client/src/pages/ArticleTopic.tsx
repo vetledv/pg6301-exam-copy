@@ -6,7 +6,7 @@ export const ArticleTopic = () => {
     const { topic } = useParams() as { topic: string }
     const uTopic = topic?.charAt(0).toUpperCase() + topic?.slice(1)
     const articles = useAllArticlesByTopic(topic)
-    if (articles.isLoading) {
+    if (articles.isLoading || !articles.data) {
         return <div>Loading...</div>
     }
     if (articles.isError) {
@@ -18,14 +18,9 @@ export const ArticleTopic = () => {
     return (
         <div className='flex flex-col gap-2 w-full lg:full xl:w-3/4'>
             <div className='text-xl'>{uTopic}</div>
-            {articles.data &&
-                articles.isSuccess &&
-                articles.data
-                    .slice()
-                    .reverse()
-                    .map((article, i) => (
-                        <ArticleLayoutHome key={i} article={article} />
-                    ))}
+            {articles.data.map((article, i) => (
+                <ArticleLayoutHome key={i} article={article} />
+            ))}
         </div>
     )
 }

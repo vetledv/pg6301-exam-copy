@@ -20,6 +20,7 @@ export const NewArticleButton = ({
     const form = useForm<Inputs>({
         defaultValues: {
             topic: 'Select',
+            date: new Date().toISOString().slice(0, 10),
         },
     })
     const postMutate = useMutateArticle()
@@ -102,7 +103,6 @@ export const NewArticleButton = ({
                         <input
                             data-testid='new-article-date'
                             type='date'
-                            defaultValue={new Date().toISOString().slice(0, 10)}
                             {...form.register('date', {
                                 required: true,
                             })}
@@ -133,7 +133,7 @@ export const NewArticleButton = ({
                         {form.formState.errors.topic && (
                             <span>This field is required</span>
                         )}
-                        <input type='submit' />
+                        <input data-testid='new-article-submit' type='submit' />
                     </form>
                 </div>
             )}

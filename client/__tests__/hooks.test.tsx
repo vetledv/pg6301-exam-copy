@@ -1,5 +1,4 @@
 import { renderHook } from '@testing-library/react-hooks'
-import { testArticle, _id } from '../jest.setup'
 import { useAllArticles, useArticle } from '../src/hooks/reactQueryHooks'
 import { createWrapper } from './client.test'
 

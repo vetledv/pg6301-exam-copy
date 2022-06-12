@@ -90,16 +90,19 @@ export const ArticleLayoutSingle = ({ article }: { article: Article }) => {
             {isEditing ? (
                 <>
                     <input
+                        data-testid='edit-headline'
                         onChange={(e) => setHeadline(e.target.value)}
                         value={headline}
                         className='bg-primary w-full'></input>
                     {userType === 'anon' ? null : (
                         <div className='px-4 pt-2 flex flex-col gap-2'>
                             <textarea
+                                data-testid='edit-body'
                                 onChange={(e) => setBody(e.target.value)}
                                 value={body}
                                 className='bg-primary w-full'
-                                rows={10}></textarea>
+                                rows={10}
+                            />
                             {userType === 'editor' &&
                                 user.data?.user.microsoft?.sub ===
                                     article.sub && (

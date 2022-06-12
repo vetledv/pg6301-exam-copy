@@ -59,5 +59,14 @@ export const testUser = {
             userinfo_endpoint: 'https://graph.microsoft.com/oidc/userinfo',
         },
     },
-    user: {},
+    user: {
+        microsoft: {
+            sub: 'dsrftygjuhrfty',
+            name: 'Vetle Brandth',
+            family_name: 'Brandth',
+            given_name: 'Vetle',
+            picture: 'https://graph.microsoft.com/v1.0/me/photo/$value',
+            email: 'vebr006@student.kristiania.no',
+        },
+    },
 }

@@ -89,6 +89,7 @@ export const ArticleRouter = (db: Db) => {
         const articles = await db
             .collection('articles')
             .find({ topic: uTopic })
+            .sort({ _id: -1 })
             .map(
                 ({ _id, author, body, date, headline, sub, topic }) =>
                     ({
