@@ -1,9 +1,10 @@
 require('../src/mocks/matchMedia.mock')
 import '@testing-library/jest-dom'
+import ReactRouterDom from 'react-router-dom'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter, Route, Router } from 'react-router-dom'
 import { TextDecoder, TextEncoder } from 'util'
 import * as index from '../src/index'
 import { Article } from '../src/pages/Article'
@@ -18,10 +19,19 @@ global.TextEncoder = TextEncoder
 //@ts-ignore
 global.TextDecoder = TextDecoder
 
+const mockUseParam = jest.fn()
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useParams: () => mockUseParam,
+}))
+
 const createTestQueryClient = () =>
     new QueryClient({
         defaultOptions: {
             queries: {
+                retry: false,
+            },
+            mutations: {
                 retry: false,
             },
         },
@@ -63,19 +73,15 @@ export const renderWithClient = (ui: React.ReactElement) => {
 export const RenderWithUserContext = ({
     children,
     userType,
-    initialEntries,
 }: {
     children: ReactNode
     userType?: userContextType
-    initialEntries?: string[]
 }) => {
     userType = userType || 'anon'
     const setUserType = jest.fn()
     return (
         <UserContext.Provider value={{ userType, setUserType }}>
-            <MemoryRouter initialEntries={initialEntries}>
-                {children}
-            </MemoryRouter>
+            <MemoryRouter>{children}</MemoryRouter>
         </UserContext.Provider>
     )
 }
@@ -103,9 +109,12 @@ describe('Client tests', () => {
         })
     })
 
-    test('Article page', async () => {
+    test('Article page edit article', async () => {
+        jest.spyOn(ReactRouterDom, 'useParams').mockReturnValue({
+            id: '69',
+        })
         renderWithClient(
-            <RenderWithUserContext initialEntries={['/69']} userType='editor'>
+            <RenderWithUserContext userType='editor'>
                 <Article />
             </RenderWithUserContext>
         )
@@ -113,78 +122,138 @@ describe('Client tests', () => {
         expect(loading).toBeInTheDocument()
         await waitFor(() => {
             const article = screen.getByText(/Vetle Brandth/i)
-            expect(article).toBeInTheDocument()
-        })
-        await waitFor(() => {
             const editBtn = screen.getByText(/Edit/i)
-            expect(editBtn).toBeInTheDocument()
-            fireEvent.click(editBtn)
+            expect(article && editBtn).toBeInTheDocument()
+            act(() => {
+                fireEvent.click(editBtn)
+            })
             expect(screen.getByText(/Cancel/i)).toBeInTheDocument()
-        })
-        await waitFor(() => {
             const headlineInput = screen.getByTestId('edit-headline')
-            fireEvent.change(headlineInput, {
-                target: { value: 'New headline' },
+            const bodyInput = screen.getByTestId('edit-body')
+            const submitBtn = screen.getByText(/Submit/i)
+            act(() => {
+                fireEvent.change(headlineInput, {
+                    target: { value: 'New headline' },
+                })
             })
             expect(headlineInput).toHaveValue('New headline')
-            const bodyInput = screen.getByTestId('edit-body')
-            fireEvent.change(bodyInput, {
-                target: { value: 'New body' },
+            act(() => {
+                fireEvent.change(bodyInput, {
+                    target: { value: 'New body' },
+                })
             })
             expect(bodyInput).toHaveValue('New body')
+            act(() => {
+                fireEvent.click(submitBtn)
+            })
+            expect(
+                screen.queryByTestId('edit-headline')
+            ).not.toBeInTheDocument()
         })
     })
 
-    test('NewArticleButton', async () => {
+    test('Article page error', async () => {
+        jest.spyOn(ReactRouterDom, 'useParams').mockReturnValue({
+            id: '123',
+        })
+        renderWithClient(
+            <RenderWithUserContext userType='editor'>
+                <Article />
+            </RenderWithUserContext>
+        )
+        const loading = await screen.findByText(/Loading.../i)
+        expect(loading).toBeInTheDocument()
+        await waitFor(() => {
+            const error = screen.getByText(/Error/i)
+            expect(error).toBeInTheDocument()
+        })
+    })
+
+    test('NewArticleButton error', async () => {
         renderWithClient(
             <RenderWithUserContext userType='editor'>
                 <Home />
             </RenderWithUserContext>
         )
+
         await waitFor(() => {
             const newArticleBtn = screen.getByText(/New article/i)
-            fireEvent.click(newArticleBtn)
+            act(() => {
+                fireEvent.click(newArticleBtn)
+            })
             expect(screen.getByText(/Cancel/i)).toBeInTheDocument()
             const submit = screen.getByTestId('new-article-submit')
-            fireEvent.click(submit)
+            act(() => {
+                fireEvent.click(submit)
+            })
             const errorSpans = screen.getAllByText(/This field is required/i)
             expect(errorSpans[0]).toBeInTheDocument()
         })
+    })
+    test('NewArticleButton click cancel', async () => {
+        renderWithClient(
+            <RenderWithUserContext userType='editor'>
+                <Home />
+            </RenderWithUserContext>
+        )
+
         await waitFor(() => {
             const newArticleBtn = screen.getByText(/New article/i)
-            fireEvent.click(newArticleBtn)
+            act(() => {
+                fireEvent.click(newArticleBtn)
+            })
             expect(screen.getByText(/Cancel/i)).toBeInTheDocument()
-            fireEvent.change(screen.getByTestId('new-article-headline'), {
-                target: { value: 'Hello World' },
+            act(() => {
+                fireEvent.click(screen.getByText(/Cancel/i))
             })
-            fireEvent.change(screen.getByTestId('new-article-body'), {
-                target: { value: 'Hello World' },
-            })
-            fireEvent.change(screen.getByTestId('new-article-date'), {
-                target: { value: '2020-01-01' },
-            })
-            fireEvent.change(screen.getByTestId('new-article-topic'), {
-                target: { value: 'News' },
-            })
-            const submit = screen.getByTestId('new-article-submit')
-            fireEvent.click(submit)
-            expect(screen.getByText(/Cancel/i)).toBeInTheDocument()
+            expect(screen.queryByText(/Cancel/i)).not.toBeInTheDocument()
         })
     })
-
+    // test('NewArticleButton submit', async () => {
+    //     renderWithClient(
+    //         <RenderWithUserContext userType='editor'>
+    //             <Home />
+    //         </RenderWithUserContext>
+    //     )
+    //     await waitFor(() => {
+    //         const newArticleBtn = screen.getByText(/New article/i)
+    //         fireEvent.click(newArticleBtn)
+    //         expect(screen.getByText(/Cancel/i)).toBeInTheDocument()
+    //         const submit = screen.getByTestId('new-article-submit')
+    //         fireEvent.click(submit)
+    //         const errorSpans = screen.getAllByText(/This field is required/i)
+    //         expect(errorSpans[0]).toBeInTheDocument()
+    //     })
+    //         const newArticleBtn = screen.getByText(/New article/i)
+    //         fireEvent.click(newArticleBtn)
+    //         expect(screen.getByText(/Cancel/i)).toBeInTheDocument()
+    //         fireEvent.change(screen.getByTestId('new-article-headline'), {
+    //             target: { value: 'new headline' },
+    //         })
+    //         fireEvent.change(screen.getByTestId('new-article-body'), {
+    //             target: { value: 'new body' },
+    //         })
+    //         fireEvent.change(screen.getByTestId('new-article-topic'), {
+    //             target: { value: 'News' },
+    //         })
+    //         fireEvent.change(screen.getByTestId('new-article-date'), {
+    //             target: { value: '2020-01-01' },
+    //         })
+    //         const submit = screen.getByTestId('new-article-submit')
+    //         fireEvent.click(submit)
+    // })
     test('Login and click login with google', async () => {
         renderWithClient(
             <RenderWithUserContext userType='anon'>
                 <Login />
             </RenderWithUserContext>
         )
-        //mock  window.location.href to make sure it's not redirected
-        window.location.href = 'http://localhost:3000/'
         await waitFor(() => {
             fireEvent.click(screen.getByText(/Google/i))
             expect(sessionStorage.getItem('expected_state')).toBeTruthy()
         })
     })
+
     test('LoginCallback missing access token', async () => {
         renderWithClient(
             <RenderWithUserContext userType='anon'>
@@ -199,18 +268,17 @@ describe('Client tests', () => {
     })
 
     test('ArticleTopic page', async () => {
-        // set url to /topics/News
-
+        jest.spyOn(ReactRouterDom, 'useParams').mockReturnValue({
+            topic: 'news',
+        })
         renderWithClient(
-            <RenderWithUserContext
-                initialEntries={['/topic/news']}
-                userType='reader'>
+            <RenderWithUserContext userType='reader'>
                 <ArticleTopic />
             </RenderWithUserContext>
         )
-        //wait for loading
         await waitFor(() => {
-            expect(screen.getByText(/News/i)).toBeInTheDocument()
+            const newsDivs = screen.getAllByText(/News/i)
+            expect(newsDivs[0]).toBeInTheDocument()
         })
     })
 
@@ -222,6 +290,7 @@ describe('Client tests', () => {
         )
         await waitFor(() => {
             expect(screen.getByText(/Vetle Brandth/i)).toBeInTheDocument()
+            expect(screen.getByText(/Log out/i)).toBeInTheDocument()
         })
     })
 })

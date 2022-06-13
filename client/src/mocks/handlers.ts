@@ -5,6 +5,9 @@ export const handlers = [
     rest.get('/api/login', (req, res, ctx) => {
         return res(ctx.status(200), ctx.json({ ...testUser }))
     }),
+    rest.delete('/api/login', (req, res, ctx) => {
+        return res(ctx.status(200))
+    }),
     rest.get('/api/articles', (req, res, ctx) => {
         const page = req.url.searchParams.get('page')
         if (page) {
@@ -22,12 +25,20 @@ export const handlers = [
     }),
 
     rest.get('/api/articles/:id', (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json({ ...testArticle }))
+        if (req.params.id === '69') {
+            return res(ctx.status(200), ctx.json({ ...testArticle }))
+        } else {
+            throw new Error('Article not found')
+        }
     }),
     rest.get('/api/articles/topic/:topic', (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json([{ ...testArticle }]))
+        if (req.params.topic === 'news') {
+            return res(ctx.status(200), ctx.json([{ ...testArticle }]))
+        } else {
+            throw new Error('Article not found')
+        }
     }),
-    rest.post('/api/articles', (req, res, ctx) => {
+    rest.post('/api/articles/:id', (req, res, ctx) => {
         return res(ctx.status(200), ctx.json({ ...testArticle }))
     }),
 ]
