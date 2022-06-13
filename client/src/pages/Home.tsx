@@ -1,13 +1,15 @@
 import { useContext, useEffect, useRef } from 'react'
-import { useInfiniteQuery } from 'react-query'
+import { useInfiniteQuery, useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 import { ArticleLayoutHome } from '../components/ArticleLayouts'
 import { NewArticleButton } from '../components/NewArticleButton'
 import { InfArticles } from '../hooks/reactQueryHooks'
+import { fetchJSON } from '../lib/fetch'
 import SkeletonArticle from '../SkeletonArticle'
 import { UserContext, UserContextState } from '../UserContext'
 
 export const Home = () => {
+    const queryClient = useQueryClient()
     const navigate = useNavigate()
     const socket = useRef<WebSocket | null>(null)
     const fetchPage = async ({ pageParam = 1 }) => {
@@ -24,6 +26,12 @@ export const Home = () => {
         }
     )
     const { userType } = useContext(UserContext) as UserContextState
+
+    const onHover = (id: string) => {
+        queryClient.prefetchQuery(['article', id], {
+            queryFn: fetchJSON('/api/articles/' + id),
+        })
+    }
 
     useEffect(() => {
         socket.current = new WebSocket(
@@ -46,7 +54,13 @@ export const Home = () => {
 
     if (query.isLoading || !query.data) {
         return (
-            <div className='flex flex-col gap-2 w-full lg:full xl:w-3/4'>
+            <div
+                data-testid='loading-home'
+                className='flex flex-col gap-2 w-full lg:full xl:w-3/4'>
+                <SkeletonArticle />
+                <SkeletonArticle />
+                <SkeletonArticle />
+                <SkeletonArticle />
                 <SkeletonArticle />
             </div>
         )
@@ -77,7 +91,12 @@ export const Home = () => {
             )}
             {query.data.pages.map((page) =>
                 page.articles.map((article, i) => (
-                    <div key={i} className='col-span-1 lg:col-span-3'>
+                    <div
+                        key={i}
+                        className='col-span-1 lg:col-span-3'
+                        onMouseEnter={() => {
+                            onHover(article._id)
+                        }}>
                         <ArticleLayoutHome article={article} />
                     </div>
                 ))

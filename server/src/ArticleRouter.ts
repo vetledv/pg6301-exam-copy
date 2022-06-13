@@ -114,6 +114,10 @@ export const ArticleRouter = (db: Db) => {
         const article = await db
             .collection('articles')
             .findOne({ _id: new ObjectId(req.params.id) })
+        if (!article) {
+            res.status(400).send('Article not found')
+            return
+        }
         res.json(article)
     })
 

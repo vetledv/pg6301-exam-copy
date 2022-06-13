@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { Loading } from '../../components/Loading'
 import { useMutateUser, useUser } from '../../hooks/reactQueryHooks'
 import { loginUser } from '../../lib/fetch'
 
@@ -65,6 +66,6 @@ export const LoginCallback = () => {
     if (error) {
         return <div>{error.toString()}</div>
     } else {
-        return <div>Loading...</div>
+        return <Loading />
     }
 }

@@ -47,7 +47,7 @@ export interface UserNoConfig {
 }
 
 export interface Article {
-    _id?: string
+    _id: string
     author: string
     body: string
     date: Date

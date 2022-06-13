@@ -10,6 +10,7 @@ import { Home } from './pages/Home'
 import { Login } from './pages/Login.tsx/Login'
 import { LoginCallback } from './pages/Login.tsx/LoginCallback'
 import { Profile } from './pages/Profile'
+import SkeletonArticle from './SkeletonArticle'
 import {
     UserContext,
     UserContextProvider,
@@ -41,21 +42,27 @@ const AppRouter = () => {
     const { setUserType } = useContext(UserContext) as UserContextState
 
     useEffect(() => {
-        if (query.data?.user.microsoft) {
-            setUserType('editor')
-        } else if (query.data?.user.google) {
-            setUserType('reader')
-        } else {
+        if (!query.data) {
             setUserType('anon')
         }
-    }, [query.data?.user.microsoft, query.data?.user.google])
+        if (query.data?.user.microsoft) {
+            setUserType('editor')
+        }
+        if (query.data?.user.google) {
+            setUserType('reader')
+        }
+    }, [query])
 
     if (query.isLoading || query.isFetching || query.isRefetching) {
         return (
             <BrowserRouter>
                 <Layout>
-                    <div className='py-2 flex justify-center lg:full xl:w-3/4'>
-                        <div>Loading...</div>
+                    <div className='flex flex-col gap-2 w-full lg:full xl:w-3/4'>
+                        <SkeletonArticle />
+                        <SkeletonArticle />
+                        <SkeletonArticle />
+                        <SkeletonArticle />
+                        <SkeletonArticle />
                     </div>
                 </Layout>
             </BrowserRouter>

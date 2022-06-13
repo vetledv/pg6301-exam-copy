@@ -61,12 +61,14 @@ export const ArticleLayoutSingle = ({ article }: { article: Article }) => {
     const [headline, setHeadline] = useState(article.headline)
     const [body, setBody] = useState(article.body)
     const [ws, setWs] = useState<WebSocket>()
+
     useEffect(() => {
         const socket = new WebSocket(
             window.location.origin.replace(/^http/, 'ws')
         )
         setWs(socket)
     }, [])
+
     const handleSubmit = () => {
         const author = article.author
         const date = article.date
@@ -93,39 +95,36 @@ export const ArticleLayoutSingle = ({ article }: { article: Article }) => {
                         data-testid='edit-headline'
                         onChange={(e) => setHeadline(e.target.value)}
                         value={headline}
-                        className='bg-primary w-full'></input>
-                    {userType === 'anon' ? null : (
-                        <div className='px-4 pt-2 flex flex-col gap-2'>
-                            <textarea
-                                data-testid='edit-body'
-                                onChange={(e) => setBody(e.target.value)}
-                                value={body}
-                                className='bg-primary w-full'
-                                rows={10}
-                            />
-                            {userType === 'editor' &&
-                                user.data?.user.microsoft?.sub ===
-                                    article.sub && (
-                                    <div className='flex gap-2'>
-                                        <button
-                                            className='px-4 py-2 rounded-lg bg-cyan-600 w-fit'
-                                            onClick={() => setIsEditing(false)}>
-                                            Cancel
-                                        </button>
-                                        <button
-                                            className='px-4 py-2 rounded-lg bg-cyan-600 w-fit'
-                                            onClick={() => handleSubmit()}>
-                                            Submit
-                                        </button>
-                                    </div>
-                                )}
-                            <div className='flex font-thin text-secondary opacity-75 justify-end'>
-                                {article.author}
-                                <div className='px-2'> · </div>
-                                {new Date(article.date).toLocaleDateString()}
-                            </div>
+                        className='bg-primary w-full p-2 rounded-lg'></input>
+                    <div className='pt-2 flex flex-col gap-2'>
+                        <textarea
+                            data-testid='edit-body'
+                            onChange={(e) => setBody(e.target.value)}
+                            value={body}
+                            className='bg-primary w-full p-2 rounded-lg'
+                            rows={10}
+                        />
+                        {userType === 'editor' &&
+                            user.data?.user.microsoft?.sub === article.sub && (
+                                <div className='flex gap-2'>
+                                    <button
+                                        className='px-4 py-2 rounded-lg bg-cyan-600 w-fit'
+                                        onClick={() => setIsEditing(false)}>
+                                        Cancel
+                                    </button>
+                                    <button
+                                        className='px-4 py-2 rounded-lg bg-cyan-600 w-fit'
+                                        onClick={() => handleSubmit()}>
+                                        Submit
+                                    </button>
+                                </div>
+                            )}
+                        <div className='flex font-thin text-secondary opacity-75 justify-end'>
+                            {article.author}
+                            <div className='px-2'> · </div>
+                            {new Date(article.date).toLocaleDateString()}
                         </div>
-                    )}
+                    </div>
                 </>
             ) : (
                 <>

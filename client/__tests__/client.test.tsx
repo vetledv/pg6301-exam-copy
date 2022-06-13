@@ -102,7 +102,7 @@ describe('Client tests', () => {
                 <Home />
             </RenderWithUserContext>
         )
-        const loading = await screen.findByTestId('loading')
+        const loading = await screen.findByTestId('loading-home')
         expect(loading).toBeInTheDocument()
         await waitFor(() => {
             expect(screen.getByText(/Log in to see more/i)).toBeInTheDocument()
@@ -118,7 +118,7 @@ describe('Client tests', () => {
                 <Article />
             </RenderWithUserContext>
         )
-        const loading = await screen.findByText(/Loading.../i)
+        const loading = await screen.findByTestId('loading-spinner')
         expect(loading).toBeInTheDocument()
         await waitFor(() => {
             const article = screen.getByText(/Vetle Brandth/i)
@@ -161,7 +161,7 @@ describe('Client tests', () => {
                 <Article />
             </RenderWithUserContext>
         )
-        const loading = await screen.findByText(/Loading.../i)
+        const loading = await screen.findByTestId('loading-spinner')
         expect(loading).toBeInTheDocument()
         await waitFor(() => {
             const error = screen.getByText(/Error/i)

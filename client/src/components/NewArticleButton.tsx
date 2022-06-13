@@ -1,8 +1,7 @@
-import { MutableRefObject, useState } from 'react'
+import { MutableRefObject, useEffect, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useUser } from '../hooks/reactQueryHooks'
 import { useMutateArticle } from './../hooks/reactQueryHooks'
-import { useEffect } from 'react'
-import { useForm, SubmitHandler } from 'react-hook-form'
 
 interface Inputs {
     headline: string
@@ -58,7 +57,7 @@ export const NewArticleButton = ({
         <div
             onClick={() => handleOpen()}
             className={
-                'px-4 py-2 flex flex-col justify-center items-center rounded-lg ' +
+                'px-4 py-2 flex flex-col justify-center items-center rounded-lg gap-2 ' +
                 (isExpanded
                     ? 'bg-secondary'
                     : 'hover:bg-cyan-700 bg-cyan-600 transition-colors cursor-pointer')
@@ -73,7 +72,7 @@ export const NewArticleButton = ({
                 <div className='px-2 flex flex-col gap-2 w-full'>
                     <div
                         onClick={() => setIsExpanded(false)}
-                        className='bg-pink-500 flex justify-center rounded-md py-2 cursor-pointer text-contrast dark:text-primary'>
+                        className='bg-red-500 flex justify-center rounded-md py-2 cursor-pointer text-contrast dark:text-primary'>
                         Cancel
                     </div>
                     <form
@@ -100,40 +99,48 @@ export const NewArticleButton = ({
                         {form.formState.errors.body && (
                             <span>This field is required</span>
                         )}
-                        <input
-                            data-testid='new-article-date'
-                            type='date'
-                            {...form.register('date', {
-                                required: true,
-                            })}
-                            className={inputStyles}
-                        />
-                        <select
-                            data-testid='new-article-topic'
-                            className={inputStyles}
-                            {...form.register('topic', {
-                                required: true,
-                                validate: (value) =>
-                                    value !== 'Select'
-                                        ? true
-                                        : 'Select a topic',
-                            })}>
-                            <option
-                                value='Select'
-                                disabled
-                                className='disabled:hidden'>
-                                Select topic
-                            </option>
-                            <option value='News'>News</option>
-                            <option value='Sports'>Sports</option>
-                            <option value='Technology'>Technology</option>
-                            <option value='Entertainment'>Entertainment</option>
-                            <option value='Other'>Other</option>
-                        </select>
+                        <div className='flex gap-2'>
+                            <select
+                                data-testid='new-article-topic'
+                                className={inputStyles}
+                                {...form.register('topic', {
+                                    required: true,
+                                    validate: (value) =>
+                                        value !== 'Select'
+                                            ? true
+                                            : 'Select a topic',
+                                })}>
+                                <option
+                                    value='Select'
+                                    disabled
+                                    className='disabled:hidden'>
+                                    Select topic
+                                </option>
+                                <option value='News'>News</option>
+                                <option value='Sports'>Sports</option>
+                                <option value='Technology'>Technology</option>
+                                <option value='Entertainment'>
+                                    Entertainment
+                                </option>
+                                <option value='Other'>Other</option>
+                            </select>
+                            <input
+                                data-testid='new-article-date'
+                                type='date'
+                                {...form.register('date', {
+                                    required: true,
+                                })}
+                                className={inputStyles}
+                            />
+                        </div>
                         {form.formState.errors.topic && (
                             <span>This field is required</span>
                         )}
-                        <input data-testid='new-article-submit' type='submit' />
+                        <input
+                            data-testid='new-article-submit'
+                            type='submit'
+                            className='px-4 py-2 bg-cyan-600 rounded-lg text-white cursor-pointer hover:bg-cyan-700 transition-colors'
+                        />
                     </form>
                 </div>
             )}

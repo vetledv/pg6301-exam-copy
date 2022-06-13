@@ -1,5 +1,6 @@
-import { useMutateUser, useUser } from '../hooks/reactQueryHooks'
 import { useNavigate } from 'react-router-dom'
+import { Loading } from '../components/Loading'
+import { useMutateUser, useUser } from '../hooks/reactQueryHooks'
 import { logoutUser } from '../lib/fetch'
 
 export const Profile = () => {
@@ -11,9 +12,10 @@ export const Profile = () => {
         logout.mutate(null)
     }
 
-    if (user.isLoading) {
-        return <div className='text-2xl font-bold py-2'>Loading...</div>
+    if (user.isLoading || !user.data) {
+        return <Loading />
     }
+
     if (user.isError) {
         return (
             <div className='text-2xl font-bold py-2'>
@@ -37,27 +39,30 @@ export const Profile = () => {
     }
 
     return (
-        <div className='flex flex-col gap-4 bg-secondary p-4 w-full rounded-lg'>
-            <div className='flex items-center'>
-                {gUser ? (
-                    <img
-                        src={gUser ? gUser.picture : mUser?.picture}
-                        alt={gUser ? gUser.picture : mUser?.picture}
-                        className='rounded-full'></img>
-                ) : (
-                    <CircleImage letter={mUser!.name.charAt(0)}></CircleImage>
-                )}
-                <div className='px-4'>
-                    <div>{gUser ? gUser.locale : mUser?.name}</div>
-                    <div>{gUser ? gUser.email : mUser?.email}</div>
+        <div className='w-full grid grid-cols-1 lg:grid-cols-4'>
+            <div className='rounded-lg p-4 bg-secondary grid col-span-1 lg:col-span-3 gap-4 '>
+                <div className='flex items-center'>
+                    {gUser ? (
+                        <img
+                            src={gUser ? gUser.picture : mUser?.picture}
+                            alt={gUser ? gUser.picture : mUser?.picture}
+                            className='rounded-full'></img>
+                    ) : (
+                        <CircleImage
+                            letter={mUser!.name.charAt(0)}></CircleImage>
+                    )}
+                    <div className='px-4'>
+                        <div>{gUser ? gUser.name : mUser?.name}</div>
+                        <div>{gUser ? gUser.email : mUser?.email}</div>
+                    </div>
                 </div>
+                <div className='border-b border-secondary' />
+                <button
+                    className='rounded-lg w-fit px-6 py-2 bg-red-400 hover:bg-red-600 transition-colors '
+                    onClick={handleLogout}>
+                    Log out
+                </button>
             </div>
-            <div className='border-b border-secondary' />
-            <button
-                className='rounded-lg w-fit px-6 py-2 bg-red-400 hover:bg-red-600 transition-colors '
-                onClick={handleLogout}>
-                Log out
-            </button>
         </div>
     )
 }

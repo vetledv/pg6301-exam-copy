@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { useMutateUser, useUser } from '../../hooks/reactQueryHooks'
+import { useUser } from '../../hooks/reactQueryHooks'
 import { useTheme } from '../../hooks/useTheme'
-import { logoutUser } from '../../lib/fetch'
 import { NavItem } from './NavItem'
 import { ThemeButton } from './ThemeButton'
 
