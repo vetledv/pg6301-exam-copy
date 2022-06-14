@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Article, useEditArticle, useUser } from '../hooks/reactQueryHooks'
 import { UserContext, UserContextState } from '../UserContext'
+import { BlueButton } from './BlueButton'
 
 export const ArticleLayoutHome = ({ article }: { article: Article }) => {
     const navigate = useNavigate()
@@ -86,6 +87,9 @@ export const ArticleLayoutSingle = ({ article }: { article: Article }) => {
         ws!.send('new article')
         setIsEditing(false)
     }
+    const hasChanged = () => {
+        return headline !== article.headline || body !== article.body
+    }
 
     return (
         <div className='p-4 bg-secondary rounded-lg col-span-1 lg:col-span-3 '>
@@ -104,21 +108,16 @@ export const ArticleLayoutSingle = ({ article }: { article: Article }) => {
                             className='bg-primary w-full p-2 rounded-lg'
                             rows={10}
                         />
-                        {userType === 'editor' &&
-                            user.data?.user.microsoft?.sub === article.sub && (
-                                <div className='flex gap-2'>
-                                    <button
-                                        className='px-4 py-2 rounded-lg bg-cyan-600 w-fit'
-                                        onClick={() => setIsEditing(false)}>
-                                        Cancel
-                                    </button>
-                                    <button
-                                        className='px-4 py-2 rounded-lg bg-cyan-600 w-fit'
-                                        onClick={() => handleSubmit()}>
-                                        Submit
-                                    </button>
-                                </div>
-                            )}
+                        <div className='flex gap-2'>
+                            <BlueButton onClick={() => setIsEditing(false)}>
+                                Cancel
+                            </BlueButton>
+                            <BlueButton
+                                disabled={!hasChanged()}
+                                onClick={() => handleSubmit()}>
+                                Submit
+                            </BlueButton>
+                        </div>
                         <div className='flex font-thin text-secondary opacity-75 justify-end'>
                             {article.author}
                             <div className='px-2'> · </div>
@@ -133,7 +132,7 @@ export const ArticleLayoutSingle = ({ article }: { article: Article }) => {
                         {userType === 'editor' &&
                             user.data?.user.microsoft?.sub === article.sub && (
                                 <button
-                                    className='px-4 py-2 rounded-lg bg-cyan-600 w-fit text-contrast dark:text-primary'
+                                    className='px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors w-fit text-contrast dark:text-primary'
                                     onClick={() => setIsEditing(true)}>
                                     Edit
                                 </button>

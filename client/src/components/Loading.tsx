@@ -11,3 +11,12 @@ export const Loading = () => {
         </div>
     )
 }
+export const LoadingB = () => {
+    return (
+        <div
+            data-testid='loading-spinner'
+            className='w-full p-4 flex justify-center'>
+            <AiOutlineLoading3Quarters className='h-6 w-6 animate-spin' />
+        </div>
+    )
+}

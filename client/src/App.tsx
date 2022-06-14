@@ -22,7 +22,6 @@ const queryClient = new QueryClient({
         queries: {
             refetchOnWindowFocus: false,
             refetchOnMount: false,
-            keepPreviousData: true,
         },
     },
 })
@@ -53,7 +52,7 @@ const AppRouter = () => {
         }
     }, [query])
 
-    if (query.isLoading || query.isFetching || query.isRefetching) {
+    if (query.isLoading || !query.data) {
         return (
             <BrowserRouter>
                 <Layout>

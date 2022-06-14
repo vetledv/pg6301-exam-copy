@@ -96,6 +96,7 @@ export const useEditArticle = (param: string) => {
         {
             onSuccess: () => {
                 queryClient.refetchQueries('articles')
+                queryClient.refetchQueries('articles.infinite')
                 queryClient.refetchQueries(['article', param])
             },
         }

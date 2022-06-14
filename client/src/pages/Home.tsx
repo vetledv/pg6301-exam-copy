@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef } from 'react'
 import { useInfiniteQuery, useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 import { ArticleLayoutHome } from '../components/ArticleLayouts'
+import { LoadingB } from '../components/Loading'
 import { NewArticleButton } from '../components/NewArticleButton'
 import { InfArticles } from '../hooks/reactQueryHooks'
 import { fetchJSON } from '../lib/fetch'
@@ -19,7 +20,7 @@ export const Home = () => {
     }
 
     const query = useInfiniteQuery<InfArticles, Error>(
-        ['articlesInf'],
+        ['articles.infinite'],
         fetchPage,
         {
             getNextPageParam: (lastPage, pages) => lastPage.next,
@@ -30,6 +31,7 @@ export const Home = () => {
     const onHover = (id: string) => {
         queryClient.prefetchQuery(['article', id], {
             queryFn: fetchJSON('/api/articles/' + id),
+            staleTime: 1000 * 60 * 1,
         })
     }
 
@@ -102,7 +104,7 @@ export const Home = () => {
                 ))
             )}
             <div className='col-span-1 lg:col-span-3'>
-                {query.hasNextPage ? (
+                {!query.isFetchingNextPage && query.hasNextPage ? (
                     <button
                         className='w-full px-4 py-2 rounded-lg bg-secondary cursor-pointer'
                         onClick={() => {
@@ -113,6 +115,7 @@ export const Home = () => {
                         Load more
                     </button>
                 ) : null}
+                {query.isFetchingNextPage && <LoadingB />}
             </div>
         </div>
     )
